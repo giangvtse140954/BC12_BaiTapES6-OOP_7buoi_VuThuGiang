@@ -1,4 +1,6 @@
 const addButton = document.getElementById('addItem');
+const sortDown = document.getElementById('two');
+const sortUp = document.getElementById('three');
 const d = new Date();
 
 const months = [
@@ -39,7 +41,50 @@ addButton.addEventListener('click', () => {
     renderTask();
   }
 });
-
+sortDown.addEventListener('click', () => {
+  const sortedList = taskManagement.getTaskList().sort((a, b) => {
+    let orderBool = a.content > b.content;
+    return orderBool ? 1 : -1;
+  });
+  const str = sortedList
+    .map((task) => {
+      if (task.status === 'progressing') {
+        return `
+    <li>
+      ${task.content}
+      <span class="todo__action">
+        <i class="fa fa-trash-alt" onclick="deleteTask('${task.id}')"></i>
+        <i class="fa fa-check-circle" onclick="updateStatus('${task.id}', '${task.status}')"></i>
+      </span>
+    </li>
+  `;
+      }
+    })
+    .join('');
+  document.getElementById('todo').innerHTML = str;
+});
+sortUp.addEventListener('click', () => {
+  const sortedList = taskManagement.getTaskList().sort((a, b) => {
+    let orderBool = a.content < b.content;
+    return orderBool ? 1 : -1;
+  });
+  const str = sortedList
+    .map((task) => {
+      if (task.status === 'progressing') {
+        return `
+    <li>
+      ${task.content}
+      <span class="todo__action">
+        <i class="fa fa-trash-alt" onclick="deleteTask('${task.id}')"></i>
+        <i class="fa fa-check-circle" onclick="updateStatus('${task.id}', '${task.status}')"></i>
+      </span>
+    </li>
+  `;
+      }
+    })
+    .join('');
+  document.getElementById('todo').innerHTML = str;
+});
 function activateToast() {
   var x = document.getElementById('snackbar');
   x.className = 'show';
